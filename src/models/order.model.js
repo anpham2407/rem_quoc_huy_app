@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
 const { toJSON, paginate } = require('./plugins');
 
 const orderSchema = mongoose.Schema(
@@ -30,10 +29,9 @@ orderSchema.plugin(toJSON);
 orderSchema.plugin(paginate);
 
 orderSchema.pre('save', async function (next) {
-  const user = this;
-  if (user.isModified('password')) {
-    user.password = await bcrypt.hash(user.password, 8);
-  }
+  const doc = this;
+  const count = await Order.count('name');
+  doc.orderId = count + 1;
   next();
 });
 

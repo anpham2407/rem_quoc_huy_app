@@ -23,7 +23,17 @@ const queryOrders = async (filter, options) => {
   return users;
 };
 
+/**
+ * Get order by id
+ * @param {ObjectId} id
+ * @returns {Promise<Order>}
+ */
+const getOrderById = async (id) => {
+  return Order.find({ orderId: id });
+};
+
 module.exports = {
   createOrder,
   queryOrders,
+  getOrderById,
 };
