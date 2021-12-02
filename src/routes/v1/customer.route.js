@@ -1,37 +1,37 @@
 const express = require('express');
 const auth = require('../../middlewares/auth');
 const validate = require('../../middlewares/validate');
-const orderValidation = require('../../validations/order.validation');
-const orderController = require('../../controllers/order.controller');
+// const orderValidation = require('../../validations/order.validation');
+const customerController = require('../../controllers/customer.controller');
 
 const router = express.Router();
 
 router
   .route('/')
-  .post(auth('manageUsers'), orderController.createOrder)
-  .get(auth('getUsers'), validate(orderValidation.getOrders), orderController.getOrders);
+  .post(auth('manageUsers'), customerController.createCustomer)
+  .get(auth('getUsers'), customerController.getCustomers);
 
 router
-  .route('/:orderId')
-  .get(auth('getUsers'), orderController.getOrder)
-  .patch(auth('manageUsers'), orderController.updateOrder);
+  .route('/:customerId')
+  .get(auth('getUsers'), customerController.getCustomer)
+  .patch(auth('manageUsers'), customerController.updateCustomer);
 
 module.exports = router;
 
 /**
  * @swagger
  * tags:
- *   name: Order
- *   description: Order API
+ *   name: Customer
+ *   description: Customer API
  */
 
 /**
  * @swagger
- * /order:
+ * /customer:
  *   post:
- *     summary: Api order
- *     description: Call API Order
- *     tags: [Order]
+ *     summary: Api Customer
+ *     description: Call API Customer
+ *     tags: [Customer]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -41,58 +41,64 @@ module.exports = router;
  *           schema:
  *             type: object
  *             required:
- *               - orderId
  *               - name
- *               - totalAmount
  *             properties:
- *               orderId:
- *                 type: string
  *               name:
  *                 type: string
- *               totalAmount:
- *                 type: number
+ *               phone:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               adress:
+ *                 type: string
  *             example:
- *               orderId: OD001
- *               name: Báo giá rèm cửa
- *               totalAmount: 20000000
+ *               name: Nguyễn Văn Huy
+ *               phone: 0901234567
+ *               email: abc@test.com
+ *               address: 213 Nguyên Trãi
  *     responses:
  *       "201":
- *         description: Create
+ *         description: Create Customer
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/Order'
+ *                $ref: '#/components/schemas/Customer'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
  *         $ref: '#/components/responses/Forbidden'
  *   get:
- *     summary: Get all orders
- *     description: Only admins can retrieve all orders.
- *     tags: [Order]
+ *     summary: Get all customers
+ *     description: Only admins can retrieve all customers.
+ *     tags: [Customer]
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - in: query
- *         name: orderId
+ *         name: id
  *         schema:
  *           type: string
- *         description: Order id
- *       - in: query
- *         name: totalAmounr
- *         schema:
- *           type: number
- *         description: total amount
+ *         description: id
  *       - in: query
  *         name: name
  *         schema:
  *           type: string
- *         description: User name
+ *         description: name of customer
  *       - in: query
- *         name: role
+ *         name: phone
  *         schema:
  *           type: string
- *         description: User role
+ *         description: phone of customer
+ *       - in: query
+ *         name: email
+ *         schema:
+ *           type: string
+ *         description: email of customer
+ *       - in: query
+ *         name: address
+ *         schema:
+ *           type: string
+ *         description: address of customer
  *       - in: query
  *         name: sortBy
  *         schema:
@@ -104,7 +110,7 @@ module.exports = router;
  *           type: integer
  *           minimum: 1
  *         default: 10
- *         description: Maximum number of users
+ *         description: Maximum number of customers
  *       - in: query
  *         name: page
  *         schema:
@@ -123,7 +129,7 @@ module.exports = router;
  *                 results:
  *                   type: array
  *                   items:
- *                     $ref: '#/components/schemas/User'
+ *                     $ref: '#/components/schemas/Customer'
  *                 page:
  *                   type: integer
  *                   example: 1

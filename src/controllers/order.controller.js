@@ -17,15 +17,21 @@ const getOrders = catchAsync(async (req, res) => {
 });
 
 const getOrder = catchAsync(async (req, res) => {
-  const order = await orderService.getOrderById(req.params.orderId);
+  const order = await orderService.getOrderByOrderId(req.params.orderId);
   if (!order || !order.length) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Order not found');
   }
   res.send(order);
 });
 
+const updateOrder = catchAsync(async (req, res) => {
+  const user = await orderService.updateOrderById(req.params.orderId, req.body);
+  res.send(user);
+});
+
 module.exports = {
   createOrder,
   getOrders,
   getOrder,
+  updateOrder,
 };

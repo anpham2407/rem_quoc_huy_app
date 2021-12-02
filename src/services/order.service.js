@@ -1,4 +1,6 @@
 const { Order } = require('../models');
+const httpStatus = require('http-status');
+const ApiError = require('../utils/ApiError');
 
 /**
  * Create a order
@@ -24,16 +26,43 @@ const queryOrders = async (filter, options) => {
 };
 
 /**
+ * Get order by OrderId
+ * @param {ObjectId} id
+ * @returns {Promise<Order>}
+ */
+const getOrderByOrderId = async (id) => {
+  return Order.find({ orderId: id });
+};
+
+/**
  * Get order by id
  * @param {ObjectId} id
  * @returns {Promise<Order>}
  */
 const getOrderById = async (id) => {
-  return Order.find({ orderId: id });
+  return Order.findById(id);
+};
+
+/**
+ * Update order by id
+ * @param {ObjectId} orderId
+ * @param {Object} updateBody
+ * @returns {Promise<User>}
+ */
+const updateOrderById = async (orderId, updateBody) => {
+  const order = await getOrderById(orderId);
+  if (!order) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Order not found');
+  }
+  Object.assign(order, updateBody);
+  await order.save();
+  return order;
 };
 
 module.exports = {
   createOrder,
   queryOrders,
+  updateOrderById,
   getOrderById,
+  getOrderByOrderId
 };
