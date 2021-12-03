@@ -14,7 +14,8 @@ router
 router
   .route('/:customerId')
   .get(auth('getUsers'), customerController.getCustomer)
-  .patch(auth('manageUsers'), customerController.updateCustomer);
+  .patch(auth('manageUsers'), customerController.updateCustomer)
+  .delete(auth('manageUsers'), customerController.deleteCustomer);
 
 module.exports = router;
 

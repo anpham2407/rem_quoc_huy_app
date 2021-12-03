@@ -50,9 +50,24 @@ const updateCustomerById = async (customerId, updateBody) => {
   return customer;
 };
 
+/**
+ * Delete customer by id
+ * @param {ObjectId} customerId
+ * @returns {Promise<Customer>}
+ */
+const deleteCustomerById = async (customerId) => {
+  const customer = await getCustomerById(customerId);
+  if (!customer) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Customer not found');
+  }
+  await customer.remove();
+  return customer;
+};
+
 module.exports = {
   createCustomer,
   queryCustomers,
   getCustomerById,
-  updateCustomerById
+  updateCustomerById,
+  deleteCustomerById,
 };

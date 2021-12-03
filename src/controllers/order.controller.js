@@ -29,9 +29,15 @@ const updateOrder = catchAsync(async (req, res) => {
   res.send(user);
 });
 
+const deleteOrder = catchAsync(async (req, res) => {
+  await orderService.deleteOrderById(req.params.orderId);
+  res.status(httpStatus.NO_CONTENT).send();
+});
+
 module.exports = {
   createOrder,
   getOrders,
   getOrder,
   updateOrder,
+  deleteOrder,
 };

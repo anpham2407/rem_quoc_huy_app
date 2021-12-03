@@ -59,10 +59,25 @@ const updateOrderById = async (orderId, updateBody) => {
   return order;
 };
 
+/**
+ * Delete order by id
+ * @param {ObjectId} orderId
+ * @returns {Promise<Order>}
+ */
+const deleteOrderById = async (orderId) => {
+  const order = await getOrderById(orderId);
+  if (!order) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Order not found');
+  }
+  await order.remove();
+  return order;
+};
+
 module.exports = {
   createOrder,
   queryOrders,
   updateOrderById,
   getOrderById,
-  getOrderByOrderId
+  getOrderByOrderId,
+  deleteOrderById,
 };

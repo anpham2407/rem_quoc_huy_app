@@ -29,9 +29,15 @@ const updateCustomer = catchAsync(async (req, res) => {
   res.send(user);
 });
 
+const deleteCustomer = catchAsync(async (req, res) => {
+  await customerService.deleteCustomerById(req.params.customerId);
+  res.status(httpStatus.NO_CONTENT).send();
+});
+
 module.exports = {
   createCustomer,
   getCustomers,
   getCustomer,
-  updateCustomer
+  updateCustomer,
+  deleteCustomer,
 };
