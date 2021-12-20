@@ -2,7 +2,9 @@ const httpStatus = require('http-status');
 const pick = require('../utils/pick');
 const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
-const { orderService } = require('../services');
+const {
+  orderService
+} = require('../services');
 
 const createOrder = catchAsync(async (req, res) => {
   const order = await orderService.createOrder(req.body);
@@ -19,19 +21,28 @@ const getOrders = catchAsync(async (req, res) => {
 const getOrder = catchAsync(async (req, res) => {
   const order = await orderService.getOrderByOrderId(req.params.orderId);
   if (!order || !order.length) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Order not found');
+    throw new ApiError(httpStatus.NOT_FOUND, 'Order error');
   }
-  res.send(order);
+  res.send({
+    order,
+    code: 1,
+  });
 });
 
 const updateOrder = catchAsync(async (req, res) => {
-  const user = await orderService.updateOrderById(req.params.orderId, req.body);
-  res.send(user);
+  const order = await orderService.updateOrderById(req.params.orderId, req.body);
+  if (!order) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Order update error');
+  }
+  res.send({
+    order,
+    code: 1,
+  });
 });
 
 const deleteOrder = catchAsync(async (req, res) => {
   await orderService.deleteOrderById(req.params.orderId);
-  res.status(httpStatus.NO_CONTENT).send();
+  res.send({ code: 1, message: 'Xoá đơn hàng thành công' });
 });
 
 module.exports = {
